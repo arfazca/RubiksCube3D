@@ -1,0 +1,81 @@
+name: Cross-Platform Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake g++ freeglut3-dev libglu1-mesa-dev
+    
+    - name: Configure CMake
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+    
+    - name: Build
+      run: cmake --build build --config Release
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: rubiks-cube-linux
+        path: build/RubiksCube
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        # OpenGL and GLUT are pre-installed on macOS
+        brew install cmake
+    
+    - name: Configure CMake
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+    
+    - name: Build
+      run: cmake --build build --config Release
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: rubiks-cube-macos
+        path: build/RubiksCube
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup MSVC
+      uses: microsoft/setup-msbuild@v1.1
+    
+    - name: Install dependencies
+      run: |
+        # Install vcpkg
+        git clone https://github.com/Microsoft/vcpkg.git
+        .\vcpkg\bootstrap-vcpkg.bat
+        .\vcpkg\vcpkg install freeglut:x64-windows
+    
+    - name: Configure CMake
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release `
+          -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}\vcpkg\scripts\buildsystems\vcpkg.cmake"
+    
+    - name: Build
+      run: cmake --build build --config Release
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: rubiks-cube-windows
+        path: build/Release/RubiksCube.exe
