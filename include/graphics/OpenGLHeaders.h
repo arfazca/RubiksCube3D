@@ -7,10 +7,12 @@
     #include <OpenGL/glu.h>
     #include <GLUT/glut.h>
 #elif _WIN32
+    #define WIN32_LEAN_AND_MEAN
+    #include <windows.h>
     #include <GL/gl.h>
     #include <GL/glu.h>
     #include <GL/glut.h>
-#else // Linux
+#else 
     #include <GL/gl.h>
     #include <GL/glu.h>
     #include <GL/glut.h>
