@@ -96,4 +96,5 @@ cmake --build .
 
 ## License
 
-MIT License - see LICENSE file for details
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE) 
+Copyright © 2025 Arfaz
