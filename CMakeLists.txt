@@ -13,7 +13,6 @@ if(APPLE)
 elseif(UNIX)
     find_package(GLUT REQUIRED)
 elseif(WIN32)
-    # For Windows, you'll need to provide paths to freeglut
     find_package(GLUT REQUIRED)
 endif()
 
